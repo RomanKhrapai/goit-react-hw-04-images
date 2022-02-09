@@ -14,6 +14,6 @@ export const fetchArticlesWithQuery = async (page,search) => {
  return response;
 };
 
-export default {
-  fetchArticlesWithQuery,
-};
+// export default {
+//   fetchArticlesWithQuery,
+// };
