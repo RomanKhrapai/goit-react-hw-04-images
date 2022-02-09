@@ -3,7 +3,7 @@ import {React, Component } from "react";
 import {AppContainer} from './AppContainer.styles'
 import Searchbar from "./Searchbar";
 import ImageGallery from "./ImageGallery";
-import api from '../services/api'
+import {api} from '../services/api'
 
 
 class App extends Component{
