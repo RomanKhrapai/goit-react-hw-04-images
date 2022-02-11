@@ -1,61 +1,37 @@
 import {React, Component } from "react";
 
 import {AppContainer} from './AppContainer.styles'
+import Gallery from "./Gallery";
 import Searchbar from "./Searchbar";
-import ImageGallery from "./ImageGallery";
-import {api} from '../services/api'
+
+
+
 
 
 class App extends Component{
 state = {
   searchText : '',
-  data:[],
 }
 
-onSudmit = data => {
+formSudmitHandler = value => {
   this.setState({
-    searchText: data
+    searchText: value,
   }
  )
 }
 
- fetch = async (page,search)=>{
-  try {
-    const data = api.fetchArticlesWithQuery(page,search);
-
-  data.then ((data)=>{
-    this.setState({ data });
-    console.log(data);
-    return data;
-  })
-    
-  } catch (error) {
-    this.setState({ error });
-  } finally {
-    this.setState({ isLoading: false });
-  }
-}
-componentDidMount() {
-
-
-console.log(this.fetch(1,"cat")); 
-
-
-}
-
 render(){
-
-
+const {formSudmitHandler} = this;
+const {searchText} = this.state;
 
  return (
     <AppContainer>
-      <Searchbar>
-        onSubmit={this.onSudmit}
+      <Searchbar
+       onSubmit={formSudmitHandler}
+       >
       </Searchbar>
-      <ImageGallery>
-        data={this.data}
-      </ImageGallery>
-    </AppContainer>
+    <Gallery searchText={searchText}/>
+    </AppContainer >
   ); 
 }
 }
