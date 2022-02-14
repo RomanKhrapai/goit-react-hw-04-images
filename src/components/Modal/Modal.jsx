@@ -1,4 +1,4 @@
-import React,{Component} from "react";
+import {useEffect} from "react";
 import { createPortal } from "react-dom";
 
 import { Overlay } from "./Overlay.styles";
@@ -6,35 +6,26 @@ import { ModalWindow } from "./ModalWindow.styles";
 
 const modalRoot = document.querySelector('#modal-root')
 
-class Modal extends Component{
+function Modal ({onClose,children}){
 
-    componentDidMount(){
-window.addEventListener('keydown', this.hendeleKeyDoun )
-    }
-
-    componentWillUnmount(){
-window.removeEventListener('keydown',this.hendeleKeyDoun)
-    }
-
-hendeleKeyDoun = e=>{
+const hendeleKeyDoun = e => {
     if(e.code==='Escape'){
-        this.props.onClose();
+        onClose();
     }
 }
 
-hendleBackDropClick = e=>{
-    if(e.currentTarget===e.target){
-        this.props.onClose();
-    }
-}
+const hendleBackDropClick = e=>{ if(e.currentTarget===e.target){ onClose();}}
 
-    render(){
+useEffect(()=>{
+   window.addEventListener('keydown', hendeleKeyDoun);
+    return () => {window.removeEventListener('keydown', hendeleKeyDoun)};
+});
+
         return createPortal(
-            <Overlay onClick={this.hendleBackDropClick}>
-                <ModalWindow> {this.props.children} </ModalWindow>
+            <Overlay onClick={hendleBackDropClick}>
+                <ModalWindow> {children} </ModalWindow>
             </Overlay>,modalRoot
         )
-    }
 }
 
 export default Modal;

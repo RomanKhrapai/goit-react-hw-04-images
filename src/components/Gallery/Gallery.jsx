@@ -1,4 +1,4 @@
-import {React, Component } from "react";
+import {useState, useEffect } from "react";
 import PropTypes from 'prop-types'
 import { ThreeDots } from  'react-loader-spinner'
 
@@ -7,58 +7,42 @@ import { ButtonLoadMore } from "../Button/ButtonLoadMore.styles";
 import { BoxCenter } from "./BoxCenter.styles";
 import api from '../../services/api'
 
-class Gallery extends Component{
-    state = {
-      data:[],
-      page:0,
-      status:'idle',
-      error:''
-    }
+function Gallery ({searchText}){
+    const [ data, setData ] = useState([]);
+    const [ page, setPage ] = useState(0);
+    const [ status, setStatus ] = useState('idle');
+    const [ error, setError ] = useState('');
 
-    componentDidUpdate(prevProps){
-        const {searchText} = this.props
-        if(prevProps.searchText!==searchText){
-          this.fetch(0,searchText)
-          this.setState({
-            data:[],
-            status:'panding',
-          })
-        }
-    }
+useEffect(()=>{
+    if(searchText!==''){
+     fetch(0,searchText)
+    setData([]);
+    setStatus('panding');   
+    }  
+},[searchText]);
 
-    fetch = async (page,search)=>{
+   const fetch = async (page,search)=>{
         page = page + 1;
        try {
          const data = await api.fetchArticlesWithQuery(page,search);
-        if(data.totalHits===0){
-            this.setState({status:'resolvedZero'});
+        if(data.totalHits===0){setStatus('resolvedZero');
             return
         }
          const newStatus = data.totalHits / page<=12 ? 'resolvedLast':'resolved';
-           this.setState(prevState => ({
-            status: newStatus,
-             data: [...prevState.data,...data.hits],
-             page: page
-             }))
-
+         setData(state=>[...state,...data.hits]);
+         setPage(page);
+         setStatus(newStatus);
        } catch (error) {
-         this.setState({
-             status: 'rejected',
-             error:'Error server!!!'
-             });
-       } 
+           setError('Error server!!!');
+           setStatus('rejected')
+       }
      }
  
-     LoadMore = ()=>{
-        this.fetch(this.state.page,this.props.searchText);
-        this.setState({
-            status:'resolvedPending',
-          })
+    const LoadMore = ()=>{
+        fetch(page,searchText);
+        setStatus('resolvedPending')
        }
 
-    render(){
-        const {LoadMore} = this;
-        const {data,status,error} = this.state;
 if(status==='idle'){
    return <></>
 }
@@ -99,7 +83,7 @@ if(status==='resolved'){
 if(status==='rejected'){
     return <BoxCenter><h1>{error}</h1></BoxCenter>
 }
-}
+
 }
 
 Gallery.propTypes = {

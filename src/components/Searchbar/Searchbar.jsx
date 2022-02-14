@@ -1,4 +1,4 @@
-import {React, Component } from "react";
+import {useState } from "react";
 import PropTypes from 'prop-types'
 
 import {Layout} from './Layout.styles'
@@ -7,33 +7,30 @@ import {ButtonSearch} from './ButtonSearch.styles'
 import {Label} from "./Label.styles";
 import {Input} from './Input.styles'
  
-class Searchbar extends Component {
-state = {
-    value:'',
-}
+function Searchbar ({onSubmit}) {
+  const [value, setValue] = useState('');
 
-handleChange = evt => {
+  const handleChange = evt => {
   const { value } = evt.target;
-  this.setState({ value:value });
+  setValue(value)
 };
 
-handleSubmit = evt => {
+const handleSubmit = evt => {
   evt.preventDefault();
-  const value =this.state.value.trim();
-  if(!value){
-    this.reset(); 
+  const strValue = value.trim();
+  if(!strValue){
+    reset(); 
     return
   }
-this.props.onSubmit(value);
- this.reset();
+  onSubmit(strValue);
+ reset();
 };
 
-reset = () => {
-  this.setState({ value: '' });
+const reset = () => {
+  setValue('');
 };
 
-render(){
-  const {handleSubmit,handleChange} = this;
+
 return (
   <Layout>
   <SearchForm onSubmit={handleSubmit}>
@@ -48,13 +45,12 @@ return (
       autoComplete="off"
       autoFocus
       placeholder="Search images and photos"
-      value={this.state.value}
+      value={value}
       onChange={handleChange}
     />
   </SearchForm>
 </Layout>  
 )
-}
 }
 
 Searchbar.propTypes = {

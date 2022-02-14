@@ -4,7 +4,7 @@ import {AppContainer} from './AppContainer.styles'
 import Gallery from "./Gallery";
 import Searchbar from "./Searchbar";
 
-export function App (){
+export default function App (){
   const [searchText,setsearchText]= useState('')
 
  return (

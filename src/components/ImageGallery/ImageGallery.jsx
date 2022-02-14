@@ -1,54 +1,45 @@
 
-import {React, Component } from "react";
+import {useState } from "react";
 import PropTypes from 'prop-types'
-
 
 import ImageGalleryItem from "components/ImageGalleryItem";
 import Modal from "components/Modal";
 import { List } from "./Gallery.styles";
 
-class ImageGallery extends Component{
-  state ={
-    showModal:false,
-    largeImageURL:"",
-    tags:''
+function ImageGallery({data}){
+  const [showModal,setShowModal] = useState(false);
+  const [largeImageURL,setLargeImageURL] = useState('');
+  const [tags,setTags] = useState('');
+ 
+ const toggeleModal = (e)=>{
+  setShowModal(state=>!state)
   }
 
-  toggeleModal = (e)=>{
-this.setState(({showModal})=>({
-  showModal:!showModal,
-}))
+const  openModal = (e)=>{
+    toggeleModal();
+    const {largeImageURL,tags} = data.find(({id})=> id===+e.currentTarget.dataset.id );
+    setLargeImageURL(largeImageURL);
+    setTags(tags);
   }
 
-  openModal = (e)=>{
-    this.toggeleModal();
-    const {largeImageURL,tags} = this.props.data.find(({id})=> id===+e.currentTarget.dataset.id );
-     this.setState({
-       largeImageURL,
-       tags
-    })
-  }
-
-  render(){
-    const {showModal,largeImageURL,tags} = this.state;
     return(<>
-    {showModal && <Modal onClose = {this.toggeleModal}>
+    {showModal && <Modal onClose = {toggeleModal}>
       <img src={largeImageURL} alt={tags} />  
       </Modal>}
      <List>
-    {this.props.data.map(({id,webformatURL,tags }) =>
+    {data.map(({id,webformatURL,tags }) =>
       <ImageGalleryItem
       key={id}
       id={id}
       webformatURL={webformatURL}
       tags={tags}
-      onClick={this.openModal}
+      onClick={openModal}
       />
     )}
   </List></>
    
   )
-  }
+  
 }
 
 ImageGallery.propTypes = {
