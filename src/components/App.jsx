@@ -4,7 +4,7 @@ import {AppContainer} from './AppContainer.styles'
 import Gallery from "./Gallery";
 import Searchbar from "./Searchbar";
 
-function App (){
+export default function App (){
   const [searchText,setsearchText]= useState('')
 
  return (
@@ -18,5 +18,3 @@ function App (){
   ); 
 
 }
-
-export default App;
