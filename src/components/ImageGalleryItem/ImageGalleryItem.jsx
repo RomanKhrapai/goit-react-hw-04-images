@@ -1,21 +1,18 @@
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
-import { Image } from "./Image.styles";
-import { Item } from "./ImageGalleryItem.styles";
+import { Image } from './Image.styles';
+import { Item } from './ImageGalleryItem.styles';
 
-const ImageGalleryItem = ({
-    webformatURL,id,tags,onClick
-}) => {
-  return(
+const ImageGalleryItem = ({ webformatURL, id, tags, onClick }) => {
+  return (
     <Item data-id={id} onClick={onClick}>
-    <Image src={webformatURL} alt={tags} />
-  </Item>
-  )
-}
+      <Image src={webformatURL} alt={tags} />
+    </Item>
+  );
+};
 
 ImageGalleryItem.propTypes = {
-   onClick: PropTypes.func.isRequired,
-}
+  onClick: PropTypes.func.isRequired,
+};
 
 export default ImageGalleryItem;
-
